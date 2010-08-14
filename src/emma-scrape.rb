@@ -24,4 +24,27 @@ class EmmaScraper
     # table 4 is our package table, and we want rows that have data cells, not header
     doc.xpath('//table[4]/tr/td/..').map{|row| parse_package_info( row ) }
   end
+  
+  def rolled_up
+    results = Hash.new([0,0])
+    scrape.each do |package, covered, total|
+      sub_package = ""
+      package.split('.').each do | piece |
+        sub_package += piece
+        old_covered, old_total = results[sub_package]
+        results[sub_package] = old_covered + covered, old_total + total
+        sub_package += "."
+      end
+    end
+    results
+  end
+  
+end
+
+
+class String
+  def starts_with?(prefix)
+    prefix = prefix.to_s
+    self[0, prefix.length] == prefix
+  end
 end
