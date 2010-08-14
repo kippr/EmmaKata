@@ -18,7 +18,7 @@ class EmmaScraper
     return package, covered, total   
   end
   
-  def go
+  def scrape
     doc = Nokogiri::HTML(open('http://emma.sourceforge.net/coverage_sample_a/index.html'))  
     # :( doesn't seem to be a good way to identify our table 'cleanly', this is brittle
     # table 4 is our package table, and we want rows that have data cells, not header
