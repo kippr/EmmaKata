@@ -7,6 +7,6 @@ describe EmmaScraper, "#check final piece" do
     results.should have(26).items
     package, uncovered, covered = results.last
     package.should == "org.apache.velocity.exception"
-    covered.should == 8
+    covered.should == 44
   end
 end
