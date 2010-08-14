@@ -26,7 +26,7 @@ class EmmaScraper
   end
   
   def rolled_up
-    results = Hash.new([0,0,0])
+    results = Hash.new([0,0])
     scrape.each do |package, this_covered, this_total|
       sub_package = ""
       package.split('.').each do | piece |
@@ -34,8 +34,7 @@ class EmmaScraper
         running_covered, running_total, p = results[sub_package]
         running_covered += this_covered
         running_total += this_total
-        percent = running_covered / running_total * 100
-        results[sub_package] = running_covered, running_total, percent
+        results[sub_package] = running_covered, running_total
         sub_package += "."
       end
     end
@@ -44,7 +43,8 @@ class EmmaScraper
   
   
   def print_summary
-    rolled_up.sort.each do | package, (cover, total, percent) |
+    rolled_up.sort.each do | package, (cover, total) |
+      percent = cover / total * 100
       printf "%-50s %5.2f%%  (%.0f/%.0f)\n", package, percent, cover, total
     end
   end
