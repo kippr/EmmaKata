@@ -3,7 +3,7 @@ require 'open-uri'
 
 class EmmaScraper
 
-  def initialize( url = '../data/sample.html')
+  def initialize( url = '../data/sample-emma.html')
     @url = url
   end
 
