@@ -1,3 +1,4 @@
 require 'emma-scrape'
 
-EmmaScraper.new.print_summary
+scraper = EmmaScraper.new(ARGV[0])
+scraper.print_summary
