@@ -3,6 +3,10 @@ require 'open-uri'
 
 class EmmaScraper
 
+  def initialize( url = 'http://emma.sourceforge.net/coverage_sample_a/index.html')
+    @url = url
+  end
+
   def parse_package_info( row )
     
     # the td with link has our package name in it
@@ -19,7 +23,7 @@ class EmmaScraper
   end
   
   def scrape
-    doc = Nokogiri::HTML(open('http://emma.sourceforge.net/coverage_sample_a/index.html'))  
+    doc = Nokogiri::HTML(open(@url))
     # :( doesn't seem to be a good way to identify our table 'cleanly', this is brittle
     # table 4 is our package table, and we want rows that have data cells, not header
     doc.xpath('//table[4]/tr/td/..').map{|row| parse_package_info( row ) }
