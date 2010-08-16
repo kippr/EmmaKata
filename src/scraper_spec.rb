@@ -14,7 +14,7 @@ end
 describe EmmaScraper, "#package rollup" do
   it "should roll up results to arbitrary level" do
   scraper = EmmaScraper.new
-  covered, total = scraper.rolled_up['org.apache.velocity.util']
+  covered, total = scraper.roll_up['org.apache.velocity.util']
   covered.should == 1659
   total.should == 2705
   end

@@ -29,7 +29,7 @@ class EmmaScraper
     doc.xpath('//table[4]/tr/td/..').map{|row| parse_package_info( row ) }
   end
   
-  def rolled_up
+  def roll_up
     results = Hash.new([0,0])
     scrape.each do |package, this_covered, this_total|
       sub_package = ""
@@ -47,7 +47,7 @@ class EmmaScraper
   
   
   def print_summary
-    rolled_up.sort.each do | package, (cover, total) |
+    roll_up.sort.each do | package, (cover, total) |
       percent = cover / total * 100
       printf "%-50s %5.2f%%  (%.0f/%.0f)\n", package, percent, cover, total
     end
