@@ -44,17 +44,20 @@ class EmmaScraper
     end
     results
   end
-  
-  
-  def print_summary
-    roll_up.sort.each do | package, (cover, total) |
-      percent = cover / total * 100
-      printf "%-50s %5.2f%%  (%.0f/%.0f)\n", package, percent, cover, total
-    end
-  end
-  
+    
 end
 
+class PrettyPrinter
+
+  def as_string( scraper_output )
+    output = scraper_output.sort.map do | package, (cover, total) |
+      percent = cover.to_f / total.to_f * 100.0
+      sprintf "%-50s %5.2f%%  (%.0f/%.0f)", package, percent, cover, total
+    end
+    output.join("\n")
+  end
+
+end
 
 class String
   def starts_with?(prefix)
