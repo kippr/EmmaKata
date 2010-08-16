@@ -19,3 +19,17 @@ describe EmmaScraper, "#package rollup" do
   total.should == 2705
   end
 end
+
+
+describe EmmaScraper, "#project filter" do
+  it "should summarize coverage for selected packages" do
+    scraper = EmmaScraper.new
+    project_packages = "org.apache.velocity.texen", "org.apache.velocity.texen.util", "org.apache.velocity.io"
+    results = scraper.filter(project_packages)
+    covered, total = results["org.apache.velocity.texen.util"]
+    covered.should == 98
+    covered, total = results["summary"]
+    total.should == 954
+    # todo: should we do the regular roll-up here?
+  end
+end

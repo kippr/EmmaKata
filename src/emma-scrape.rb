@@ -45,6 +45,15 @@ class EmmaScraper
     results
   end
   
+  def filter ( packages )
+    results = {}
+    scrape.each do |package, this_covered, this_total|
+      if packages.include?( package )
+        results[package] = this_covered, this_total
+      end
+    end
+    results
+  end  
   
   def print_summary
     rolled_up.sort.each do | package, (cover, total) |
