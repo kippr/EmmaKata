@@ -68,10 +68,12 @@ class ScrapeResults
     total_cover = 0
     total_total = 0
     roll_up.each do |package, ( this_covered, this_total ) |
-      if packages.include?( package )
-        total_cover += this_covered
-        total_total += this_total
+      if (packages.any?{ | p | package.starts_with?( p ) } )
         results[package] = this_covered, this_total
+        if packages.include?( package )
+          total_cover += this_covered
+          total_total += this_total
+        end
       end
     end
     results[ '* Total *'] = total_cover, total_total

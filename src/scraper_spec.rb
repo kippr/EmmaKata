@@ -40,10 +40,13 @@ describe ScrapeResults, "#filter" do
       [ "org.apache.velocity.texen.util", 3, 3 ],
       [ "org.apache.velocity.io", 0, 100 ],
       [ "org.apache.velocity.util", 918, 1000 ]
-    project_packages = "org.apache.velocity.texen", "org.apache.velocity.io"
+    
+    project_packages = "org.apache.velocity.texen", "org.apache.velocity.io"    
     filtered_results = ScrapeResults.new( input ).filter( project_packages )
-    #covered, total = filtered_results["org.apache.velocity.texen.util"]
-    #covered.should == 3
+    
+    covered, total = filtered_results["org.apache.velocity.texen.util"]
+    covered.should == 3
+    
     covered, total = filtered_results[ "* Total *" ]
     covered.should == 13
     total.should == 118
