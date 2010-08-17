@@ -4,7 +4,7 @@ describe EmmaScraper, "#scrape" do
 
   it "should find all packages and parse them correctly" do
     scraper = EmmaScraper.new
-    results = scraper.scrape
+    results = scraper.scrape.scrape_data
     results.should have(26).items
     package, covered, total = results.last
     package.should == "org.apache.velocity.exception"
@@ -13,11 +13,16 @@ describe EmmaScraper, "#scrape" do
 
 end
 
-describe EmmaScraper, "#roll_up" do
+describe ScrapeResults, "#roll_up" do
 
   it "should roll up results to arbitrary level" do
-    scraper = EmmaScraper.new
-    covered, total = scraper.roll_up['org.apache.velocity.util']
+    input =
+      ["org.apache.velocity.util.introspection", 1344, 1873 ],
+      ["org.apache.velocity.texen.util", 381, 12312],
+      ["org.apache.velocity.util", 315, 832 ]
+      
+    results = ScrapeResults.new( input )
+    covered, total = results.roll_up['org.apache.velocity.util']
     covered.should == 1659
     total.should == 2705
   end

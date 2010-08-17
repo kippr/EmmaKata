@@ -11,23 +11,8 @@ class EmmaScraper
     doc = Nokogiri::HTML(open(@url))
     # :( doesn't seem to be a good way to identify our table 'cleanly', this is brittle
     # table 4 is our package table, and we want rows that have data cells, not header
-    doc.xpath('//table[4]/tr/td/..').map{|row| parse_package_info( row ) }
-  end
-
-  def roll_up
-    results = Hash.new([0,0])
-    scrape.each do |package, this_covered, this_total|
-      sub_package = ""
-      package.split('.').each do | piece |
-        sub_package += piece
-        running_covered, running_total, p = results[sub_package]
-        running_covered += this_covered
-        running_total += this_total
-        results[sub_package] = running_covered, running_total
-        sub_package += "."
-      end
-    end
-    results
+    scrape_hash = doc.xpath('//table[4]/tr/td/..').map{|row| parse_package_info( row ) }
+    ScrapeResults.new( scrape_hash )
   end
 
   private
@@ -46,6 +31,32 @@ class EmmaScraper
       [package, covered, total]
     end
     
+end
+
+class ScrapeResults
+  
+  attr_reader :scrape_data
+  
+  def initialize( scrape )
+    @scrape_data = scrape
+  end
+  
+  def roll_up
+    results = Hash.new([0,0])
+    @scrape_data.each do |package, this_covered, this_total|
+      sub_package = ""
+      package.split('.').each do | piece |
+        sub_package += piece
+        running_covered, running_total, p = results[sub_package]
+        running_covered += this_covered
+        running_total += this_total
+        results[sub_package] = running_covered, running_total
+        sub_package += "."
+      end
+    end
+    results
+  end
+  
 end
 
 class PrettyPrinter
