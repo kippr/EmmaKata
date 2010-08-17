@@ -62,6 +62,22 @@ class ScrapeResults
     results
   end
   
+  # todo: dupe on total count
+  def filter ( packages )
+    results = {}
+    total_cover = 0
+    total_total = 0
+    roll_up.each do |package, ( this_covered, this_total ) |
+      if packages.include?( package )
+        total_cover += this_covered
+        total_total += this_total
+        results[package] = this_covered, this_total
+      end
+    end
+    results[ '* Total *'] = total_cover, total_total
+    results
+  end  
+
 end
 
 class PrettyPrinter
