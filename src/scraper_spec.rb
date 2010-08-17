@@ -17,14 +17,17 @@ describe ScrapeResults, "#roll_up" do
 
   it "should roll up results to arbitrary level" do
     input =
-      ["org.apache.velocity.util.introspection", 1344, 1873 ],
-      ["org.apache.velocity.texen.util", 381, 12312],
-      ["org.apache.velocity.util", 315, 832 ]
+      [ "org.apache.velocity.util.introspection", 10, 15 ],
+      [ "org.apache.velocity.texen.util", 5, 10],
+      [ "org.apache.velocity.util", 20, 30 ]
       
     results = ScrapeResults.new( input )
     covered, total = results.roll_up['org.apache.velocity.util']
-    covered.should == 1659
-    total.should == 2705
+    covered.should == 30
+    total.should == 45
+    
+    covered, total = results.roll_up[ '* Total *' ]
+    covered.should == 35
   end
 
 end

@@ -43,7 +43,11 @@ class ScrapeResults
   
   def roll_up
     results = Hash.new([0,0])
+    total_cover = 0
+    total_total = 0
     @scrape_data.each do |package, this_covered, this_total|
+      total_cover += this_covered
+      total_total += this_total
       sub_package = ""
       package.split('.').each do | piece |
         sub_package += piece
@@ -54,6 +58,7 @@ class ScrapeResults
         sub_package += "."
       end
     end
+    results[ '* Total *'] = total_cover, total_total
     results
   end
   
