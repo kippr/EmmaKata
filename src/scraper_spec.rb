@@ -32,6 +32,25 @@ describe ScrapeResults, "#roll_up" do
 
 end
 
+describe ScrapeResults, "#filter" do
+
+  it "should summarize coverage for selected packages (and sub-packages) only" do
+    input = 
+      [ "org.apache.velocity.texen", 10, 15 ],
+      [ "org.apache.velocity.texen.util", 3, 3 ],
+      [ "org.apache.velocity.io", 0, 100 ],
+      [ "org.apache.velocity.util", 918, 1000 ]
+    project_packages = "org.apache.velocity.texen", "org.apache.velocity.io"
+    filtered_results = ScrapeResults.new( input ).filter( project_packages )
+    #covered, total = filtered_results["org.apache.velocity.texen.util"]
+    #covered.should == 3
+    covered, total = filtered_results[ "* Total *" ]
+    covered.should == 13
+    total.should == 118
+  end
+
+end
+
 describe PrettyPrinter, "#print_summary" do
 
   it "should put it nicely to screen dump-able format" do
