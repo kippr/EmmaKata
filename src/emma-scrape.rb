@@ -49,22 +49,10 @@ class ScrapeResults
     do_roll_up
   end
   
-  # todo: dupe on total count
   def filter ( packages )
-    results = {}
-    total_cover = 0
-    total_total = 0
-    roll_up.each do |package, ( this_covered, this_total ) |
-      if (packages.any?{ | p | package.starts_with?( p ) } )
-        results[package] = this_covered, this_total
-        if packages.include?( package )
-          total_cover += this_covered
-          total_total += this_total
-        end
-      end
+    do_roll_up do | package, vals | 
+      packages.any? { | p | package.starts_with?( p ) }
     end
-    results[ '* Total *'] = total_cover, total_total
-    results
   end  
 
   private
@@ -83,7 +71,7 @@ class ScrapeResults
           running_covered, running_total = results[sub_package]
           running_covered += this_covered
           running_total += this_total
-          results[sub_package] = running_covered, running_total
+          results[ sub_package ] = running_covered, running_total
           sub_package += "."
         end
       end
