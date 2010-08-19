@@ -39,10 +39,10 @@ end
 
 class ScrapeResults
   
-  attr_reader :scrape_data
+  attr_reader :data
   
   def initialize( scrape )
-    @scrape_data = scrape
+    @data = scrape
   end
   
   def roll_up
@@ -54,6 +54,14 @@ class ScrapeResults
       packages.any? { | p | package.starts_with?( p ) }
     end
   end  
+  
+  def to_pretty_string
+    output = @data.sort.map do | package, ( cover, total ) |
+      percent = cover.to_f / total.to_f * 100.0
+      sprintf "%-50s %5.2f%%  (%.0f/%.0f)", package, percent, cover, total
+    end
+    output.join("\n")
+  end
 
   private
     def do_roll_up( &package_filter )
@@ -62,7 +70,7 @@ class ScrapeResults
       results = Hash.new( [ 0, 0 ] )
       global_cover = global_total = 0
 
-      @scrape_data.select( &package_filter ).each do | package, ( this_covered, this_total ) |
+      @data.select( &package_filter ).each do | package, ( this_covered, this_total ) |
         global_cover += this_covered
         global_total += this_total
         sub_package = ""
@@ -76,20 +84,8 @@ class ScrapeResults
         end
       end
       results[ '* Total *'] = global_cover, global_total
-      results
+      ScrapeResults.new( results )
     end
-
-end
-
-class PrettyPrinter
-
-  def as_string( scraper_output )
-    output = scraper_output.sort.map do | package, (cover, total) |
-      percent = cover.to_f / total.to_f * 100.0
-      sprintf "%-50s %5.2f%%  (%.0f/%.0f)", package, percent, cover, total
-    end
-    output.join("\n")
-  end
 
 end
 

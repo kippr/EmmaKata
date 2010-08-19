@@ -4,7 +4,7 @@ describe EmmaScraper, "#scrape" do
 
   it "should find all packages and parse them correctly" do
     scraper = EmmaScraper.new
-    results = scraper.scrape.scrape_data
+    results = scraper.scrape.data
     results.should have(26).items
     package, covered, total = results["org.apache.velocity.exception"]
     covered.should == 44
@@ -22,11 +22,11 @@ describe ScrapeResults, "#roll_up" do
       }
       
     results = ScrapeResults.new( input )
-    covered, total = results.roll_up['org.apache.velocity.util']
+    covered, total = results.roll_up.data['org.apache.velocity.util']
     covered.should == 30
     total.should == 45
     
-    covered, total = results.roll_up[ '* Total *' ]
+    covered, total = results.roll_up.data[ '* Total *' ]
     covered.should == 35
   end
 
@@ -43,7 +43,7 @@ describe ScrapeResults, "#filter" do
       }
         
     project_packages = "org.apache.velocity.texen", "org.apache.velocity.io"    
-    filtered_results = ScrapeResults.new( input ).filter( project_packages )
+    filtered_results = ScrapeResults.new( input ).filter( project_packages ).data
     
     covered, total = filtered_results["org.apache.velocity.texen.util"]
     covered.should == 3
@@ -55,13 +55,13 @@ describe ScrapeResults, "#filter" do
 
 end
 
-describe PrettyPrinter, "#print_summary" do
+describe ScrapeResults, "#to_pretty_string" do
 
   it "should put it nicely to screen dump-able format" do
     sample = {
       "my.package" => [30, 50]
     }
-    result = PrettyPrinter.new.as_string( sample )
+    result = ScrapeResults.new( sample ).to_pretty_string
     result.should match( /my\.package[ ]+60.00%[ ]*\(30\/50\)/ )
   end
 
@@ -71,7 +71,7 @@ describe PrettyPrinter, "#print_summary" do
       "PackA" => [10, 20],
       "PackB" => [10, 20]
     }
-    result = PrettyPrinter.new.as_string( sample )
+    result = ScrapeResults.new( sample ).to_pretty_string 
     result.should match( /PackA.*PackB.*PackC/m )
   end
 

@@ -1,10 +1,7 @@
 require 'emma-scrape'
-
-printer = PrettyPrinter.new
-
 scraper = EmmaScraper.new(ARGV[0])
 results = scraper.scrape
-puts printer.as_string( results.roll_up )
+puts results.roll_up.to_pretty_string
 puts " ----- "
 project = [ "org.apache.velocity.context", "org.apache.velocity.texen" ]
-puts printer.as_string( results.filter(  project ) )
+puts results.filter( project ).to_pretty_string
