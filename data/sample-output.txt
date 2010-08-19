@@ -1,0 +1,54 @@
+Parsed ../data/sample-emma.html
+ -------------------------------- 
+ -------------------------------- 
+All results with roll up
+ -------------------------------- 
+* Total *                                          56.02%  (24654/44008)
+org                                                56.02%  (24654/44008)
+org.apache                                         56.02%  (24654/44008)
+org.apache.velocity                                56.02%  (24654/44008)
+org.apache.velocity.anakia                         42.55%  (588/1382)
+org.apache.velocity.app                            26.62%  (337/1266)
+org.apache.velocity.app.event                      65.38%  (85/130)
+org.apache.velocity.app.tools                       0.00%  (0/338)
+org.apache.velocity.context                        76.03%  (368/484)
+org.apache.velocity.convert                         0.00%  (0/447)
+org.apache.velocity.exception                      100.00%  (44/44)
+org.apache.velocity.io                              0.00%  (0/348)
+org.apache.velocity.runtime                        58.16%  (20668/35538)
+org.apache.velocity.runtime.compiler                0.00%  (0/330)
+org.apache.velocity.runtime.configuration          44.90%  (748/1666)
+org.apache.velocity.runtime.directive              59.66%  (1186/1988)
+org.apache.velocity.runtime.exception              50.00%  (26/52)
+org.apache.velocity.runtime.log                    31.34%  (288/919)
+org.apache.velocity.runtime.parser                 60.33%  (15823/26228)
+org.apache.velocity.runtime.parser.node            70.08%  (3412/4869)
+org.apache.velocity.runtime.resource               63.36%  (1067/1684)
+org.apache.velocity.runtime.resource.loader        66.63%  (573/860)
+org.apache.velocity.runtime.visitor                27.59%  (152/551)
+org.apache.velocity.servlet                        16.29%  (65/399)
+org.apache.velocity.texen                          67.47%  (753/1116)
+org.apache.velocity.texen.ant                      72.16%  (368/510)
+org.apache.velocity.texen.util                     68.06%  (98/144)
+org.apache.velocity.util                           61.33%  (1659/2705)
+org.apache.velocity.util.introspection             71.76%  (1344/1873)
+ -------------------------------- 
+ -------------------------------- 
+Project packages, no roll up
+ -------------------------------- 
+org.apache.velocity.context                        76.03%  (368/484)
+org.apache.velocity.texen                          62.12%  (287/462)
+org.apache.velocity.texen.ant                      72.16%  (368/510)
+org.apache.velocity.texen.util                     68.06%  (98/144)
+ -------------------------------- 
+ -------------------------------- 
+Project package, with roll up
+ -------------------------------- 
+* Total *                                          70.06%  (1121/1600)
+org                                                70.06%  (1121/1600)
+org.apache                                         70.06%  (1121/1600)
+org.apache.velocity                                70.06%  (1121/1600)
+org.apache.velocity.context                        76.03%  (368/484)
+org.apache.velocity.texen                          67.47%  (753/1116)
+org.apache.velocity.texen.ant                      72.16%  (368/510)
+org.apache.velocity.texen.util                     68.06%  (98/144)
