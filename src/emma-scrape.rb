@@ -3,6 +3,8 @@ require 'open-uri'
 
 class EmmaScraper
 
+  attr_reader :url
+
   def initialize( url = '../data/sample-emma.html')
     @url = url
   end
@@ -46,13 +48,31 @@ class ScrapeResults
   end
   
   def roll_up
-    do_roll_up
+    results = Hash.new( [ 0, 0 ] )
+    global_cover = global_total = 0
+
+    @data.each do | package, ( this_covered, this_total ) |
+      global_cover += this_covered
+      global_total += this_total
+      sub_package = ""
+      package.split('.').each do | piece |
+        sub_package += piece
+        running_covered, running_total = results[sub_package]
+        running_covered += this_covered
+        running_total += this_total
+        results[ sub_package ] = running_covered, running_total
+        sub_package += "."
+      end
+    end
+    results[ '* Total *'] = global_cover, global_total
+    ScrapeResults.new( results )
   end
   
   def filter ( packages )
-    do_roll_up do | package, vals | 
+    filtered_data = @data.select do | package, vals | 
       packages.any? { | p | package.starts_with?( p ) }
     end
+    ScrapeResults.new( filtered_data )
   end  
   
   def to_pretty_string
@@ -62,30 +82,6 @@ class ScrapeResults
     end
     output.join("\n")
   end
-
-  private
-    def do_roll_up( &package_filter )
-      filter ||= lambda { | key, value | true }
-
-      results = Hash.new( [ 0, 0 ] )
-      global_cover = global_total = 0
-
-      @data.select( &package_filter ).each do | package, ( this_covered, this_total ) |
-        global_cover += this_covered
-        global_total += this_total
-        sub_package = ""
-        package.split('.').each do | piece |
-          sub_package += piece
-          running_covered, running_total = results[sub_package]
-          running_covered += this_covered
-          running_total += this_total
-          results[ sub_package ] = running_covered, running_total
-          sub_package += "."
-        end
-      end
-      results[ '* Total *'] = global_cover, global_total
-      ScrapeResults.new( results )
-    end
 
 end
 
