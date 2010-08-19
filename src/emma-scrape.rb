@@ -46,24 +46,7 @@ class ScrapeResults
   end
   
   def roll_up
-    results = Hash.new([0,0])
-    total_cover = 0
-    total_total = 0
-    @scrape_data.each do | package, ( this_covered, this_total ) |
-      total_cover += this_covered
-      total_total += this_total
-      sub_package = ""
-      package.split('.').each do | piece |
-        sub_package += piece
-        running_covered, running_total, p = results[sub_package]
-        running_covered += this_covered
-        running_total += this_total
-        results[sub_package] = running_covered, running_total
-        sub_package += "."
-      end
-    end
-    results[ '* Total *'] = total_cover, total_total
-    results
+    do_roll_up
   end
   
   # todo: dupe on total count
@@ -83,6 +66,30 @@ class ScrapeResults
     results[ '* Total *'] = total_cover, total_total
     results
   end  
+
+  private
+    def do_roll_up( &package_filter )
+      filter ||= lambda { | key, value | true }
+
+      results = Hash.new( [ 0, 0 ] )
+      global_cover = global_total = 0
+
+      @scrape_data.select( &package_filter ).each do | package, ( this_covered, this_total ) |
+        global_cover += this_covered
+        global_total += this_total
+        sub_package = ""
+        package.split('.').each do | piece |
+          sub_package += piece
+          running_covered, running_total = results[sub_package]
+          running_covered += this_covered
+          running_total += this_total
+          results[sub_package] = running_covered, running_total
+          sub_package += "."
+        end
+      end
+      results[ '* Total *'] = global_cover, global_total
+      results
+    end
 
 end
 
