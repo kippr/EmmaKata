@@ -11,7 +11,11 @@ class EmmaScraper
     doc = Nokogiri::HTML(open(@url))
     # :( doesn't seem to be a good way to identify our table 'cleanly', this is brittle
     # table 4 is our package table, and we want rows that have data cells, not header
-    scrape_hash = doc.xpath('//table[4]/tr/td/..').map{|row| parse_package_info( row ) }
+    scrape_results = doc.xpath('//table[4]/tr/td/..').map{ | row | parse_package_info( row ) }
+    scrape_hash = scrape_results.inject( Hash.new ) do | hash, ( package, covered, total ) |
+      hash[ package ] = [ covered, total ]
+      hash
+    end 
     ScrapeResults.new( scrape_hash )
   end
 
@@ -45,7 +49,7 @@ class ScrapeResults
     results = Hash.new([0,0])
     total_cover = 0
     total_total = 0
-    @scrape_data.each do |package, this_covered, this_total|
+    @scrape_data.each do | package, ( this_covered, this_total ) |
       total_cover += this_covered
       total_total += this_total
       sub_package = ""

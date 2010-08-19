@@ -6,8 +6,7 @@ describe EmmaScraper, "#scrape" do
     scraper = EmmaScraper.new
     results = scraper.scrape.scrape_data
     results.should have(26).items
-    package, covered, total = results.last
-    package.should == "org.apache.velocity.exception"
+    package, covered, total = results["org.apache.velocity.exception"]
     covered.should == 44
   end
 
@@ -16,10 +15,11 @@ end
 describe ScrapeResults, "#roll_up" do
 
   it "should roll up results to arbitrary level" do
-    input =
-      [ "org.apache.velocity.util.introspection", 10, 15 ],
-      [ "org.apache.velocity.texen.util", 5, 10],
-      [ "org.apache.velocity.util", 20, 30 ]
+    input = {
+      "org.apache.velocity.util.introspection" => [10, 15],
+      "org.apache.velocity.texen.util" => [5, 10],
+      "org.apache.velocity.util" => [20, 30]
+      }
       
     results = ScrapeResults.new( input )
     covered, total = results.roll_up['org.apache.velocity.util']
@@ -35,12 +35,13 @@ end
 describe ScrapeResults, "#filter" do
 
   it "should summarize coverage for selected packages (and sub-packages) only" do
-    input = 
-      [ "org.apache.velocity.texen", 10, 15 ],
-      [ "org.apache.velocity.texen.util", 3, 3 ],
-      [ "org.apache.velocity.io", 0, 100 ],
-      [ "org.apache.velocity.util", 918, 1000 ]
-    
+    input = {
+      "org.apache.velocity.texen" => [ 10, 15 ],
+      "org.apache.velocity.texen.util" => [ 3, 3 ],
+      "org.apache.velocity.io" => [ 0, 100 ],
+      "org.apache.velocity.util" => [ 918, 1000 ]
+      }
+        
     project_packages = "org.apache.velocity.texen", "org.apache.velocity.io"    
     filtered_results = ScrapeResults.new( input ).filter( project_packages )
     
