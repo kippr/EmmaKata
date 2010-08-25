@@ -31,13 +31,13 @@ describe ScrapeResults, "#roll_up" do
   end
   
   
-  it "should roll up results to arbitrary level" do
+  it "should summarize results to arbitrary level" do
     covered, total = @results.roll_up.data['org.apache.velocity.util']
     covered.should == 30
     total.should == 45
   end
   
-  it "should create a summary total row" do
+  it "should add a grand total row" do
     covered, total = @results.roll_up.data[ '* Total *' ]
     covered.should == 35
   end
@@ -58,12 +58,12 @@ describe ScrapeResults, "#filter" do
     @filtered_results = ScrapeResults.new( input ).filter( project_packages )    
   end
     
-  it "should summarize coverage for selected packages only" do
+  it "should return coverage for selected packages only" do
     covered, total = @filtered_results.data["org.apache.velocity.texen.util"]
     covered.should == 3
   end
   
-  it "should support roll-up on the filtered packages" do
+  it "should support roll-up for the filtered packages" do
     covered, total = @filtered_results.roll_up.data[ "* Total *" ]
     covered.should == 13
     total.should == 118
@@ -73,7 +73,7 @@ end
 
 describe ScrapeResults, "#to_pretty_string" do
 
-  it "should put it nicely to screen dump-able format" do
+  it "should turn results into pleasing screen dump-able format" do
     sample = {
       "my.package" => [30, 50]
     }
@@ -81,7 +81,7 @@ describe ScrapeResults, "#to_pretty_string" do
     result.should match( /my\.package[ ]+60.00%[ ]*\(30\/50\)/ )
   end
 
-  it "should be sorted" do
+  it "should sort output" do
     sample = {
       "PackC" => [10, 20],
       "PackA" => [10, 20],
