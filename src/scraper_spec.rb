@@ -2,12 +2,20 @@ require 'emma-scrape'
 
 describe EmmaScraper, "#scrape" do
 
-  it "should find all packages and parse them correctly" do
+  before do
     scraper = EmmaScraper.new
-    results = scraper.scrape.data
-    results.should have(26).items
-    package, covered, total = results["org.apache.velocity.exception"]
-    covered.should == 44
+    @results = scraper.scrape.data
+  end
+
+  it "should find all packages" do
+    @results.should have(26).items
+  end
+  
+  it "should parse each package for coverage" do
+    covered, total = @results["org.apache.velocity.context"]
+    covered.should == 368
+    total.should == 484
+
   end
 
 end
