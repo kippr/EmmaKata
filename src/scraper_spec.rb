@@ -37,7 +37,7 @@ describe ScrapeResults, "#roll_up" do
     total.should == 45
   end
   
-  it "should add a total row" do
+  it "should create a summary total row" do
     covered, total = @results.roll_up.data[ '* Total *' ]
     covered.should == 35
   end
@@ -46,7 +46,7 @@ end
 
 describe ScrapeResults, "#filter" do
 
-  it "should summarize coverage for selected packages (and sub-packages) only" do
+  before do
     input = {
       "org.apache.velocity.texen" => [ 10, 15 ],
       "org.apache.velocity.texen.util" => [ 3, 3 ],
@@ -55,12 +55,16 @@ describe ScrapeResults, "#filter" do
       }
         
     project_packages = "org.apache.velocity.texen", "org.apache.velocity.io"    
-    filtered_results = ScrapeResults.new( input ).filter( project_packages )
-  
-    covered, total = filtered_results.data["org.apache.velocity.texen.util"]
-    covered.should == 3
+    @filtered_results = ScrapeResults.new( input ).filter( project_packages )    
+  end
     
-    covered, total = filtered_results.roll_up.data[ "* Total *" ]
+  it "should summarize coverage for selected packages only" do
+    covered, total = @filtered_results.data["org.apache.velocity.texen.util"]
+    covered.should == 3
+  end
+  
+  it "should support roll-up on the filtered packages" do
+    covered, total = @filtered_results.roll_up.data[ "* Total *" ]
     covered.should == 13
     total.should == 118
   end
