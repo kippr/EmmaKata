@@ -15,26 +15,30 @@ describe EmmaScraper, "#scrape" do
     covered, total = @results["org.apache.velocity.context"]
     covered.should == 368
     total.should == 484
-
   end
 
 end
 
 describe ScrapeResults, "#roll_up" do
-
-  it "should roll up results to arbitrary level" do
+  
+  before do
     input = {
       "org.apache.velocity.util.introspection" => [10, 15],
       "org.apache.velocity.texen.util" => [5, 10],
       "org.apache.velocity.util" => [20, 30]
-      }
-      
-    results = ScrapeResults.new( input )
-    covered, total = results.roll_up.data['org.apache.velocity.util']
+      } 
+    @results = ScrapeResults.new( input )
+  end
+  
+  
+  it "should roll up results to arbitrary level" do
+    covered, total = @results.roll_up.data['org.apache.velocity.util']
     covered.should == 30
     total.should == 45
-    
-    covered, total = results.roll_up.data[ '* Total *' ]
+  end
+  
+  it "should add a total row" do
+    covered, total = @results.roll_up.data[ '* Total *' ]
     covered.should == 35
   end
 
